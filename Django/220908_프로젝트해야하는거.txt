@@ -1,0 +1,12 @@
+1. Forms
+  1) Form 만들기
+  2) ModelForm 만들기
+     1. 위젯작성하기
+  3) 데이터 검증하기
+     1. view 모양 바꾸기, URL 통합하기(ex: /new, /create >>> /create)
+  4) Decorator 사용하기 >> 데코레이터를 이용한 요청방식 제한
+2. django 사용자 인증
+  1) User만들기
+  2) AuthenticationForm
+     1. 로그인, 로그아웃, 비밀번호 변경, 회원가입
+  3) 로그인하지 않은 사용자들 권한 제한하기

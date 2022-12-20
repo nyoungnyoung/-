@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+  <h1>이건 Django Form 을 이용해서 그린 그림</h1>
+  <form action="{% url 'articles:create' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="글쓰기">
+  </form>
+</div>
+{% endblock content %}

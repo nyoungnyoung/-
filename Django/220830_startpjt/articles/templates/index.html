@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+    <h1>Hello Django!</h1>
+    <h3>{{ msg | join:'' | lower}}</h3>
+    <h3>{{ msg}}</h3>
+    <button class = "btn btn-primary">이건버튼이야</button><br>
+    <a href="{% url 'articles:throw' %}">던지러가기</a><br>
+    <a href="{% url 'articles:lotto' %}">오늘 로또 사러 가야겠네...</a>
+</div>
+{% endblock content %}

@@ -1,0 +1,74 @@
+어제 못나간 진도 마저 나갈 예정!!
+일단 어제자 코드 깃해서 가상환경 설정&requirements 설치
+가상환경 하나만 만들어놓고 실행할수있었네... 놀랍다...
+$ python -m venv venv : 가상환경 설치 / $ source ..(상위폴더)/폴더/어쩌고저쩌고/venv/Scripts/activate : 가상환경 실행
+ctrl + shift + P - 'interpreter'검색 - 파이썬 인터프리터 - venv 선택
+$ pip install -r requirements.txt / $ pip freeze > requirements.txt : 
+
+<Namespace 복습>
+articles의 urls.py / pages의 urls.py 내 path(url)의 name이 겹치는 것 존재('index')
+해결하기 위해 urlpatterns 위에 'app_name = articles' / 'app_name = pages' 붙여줌!
+=> url태그 바뀜 {% url app_name : 'urlname' %} html파일 다 돌면서 바꿔줘야함!
+이렇게 해 주고 확인해보면 url은 잘 바뀌는데 화면이 그대로임
+<Templates Namespace복습>
+쟝고는 기본적으로 app_name/templates/ 경로에 있는 파일만 찾을 수 있음
+쟝고 입장에서는 articles/templates/index.html과 pages/templates/index.html을 구분할 수 없음!
+그래서 articles/templates/     /index와 pages/templates/     /index 요기 빈 공간에 물리적인 폴더를 하나 더 넣어주기
+무식한 방법 같지만 이 방법밖에 없음... 보통은 앱 이름과 폴더이름 동일하게 설정함(헷갈리지 않도록)
+=> articles/templates/articles/index.html과 pages/templates/pages/index.html로 주소 변경됨
+쟝고는 templates 뒤쪽부터 읽는다! 이제 템플릿 가져올때는 그 뒤쪽주소 입력하면 됨!(views.py에 렌더함수 바꿔줘야함)
+
+<CRUD 복습>
+걍 코드 새로 한번 짜보고 있음..!
+1. 앱의 models.py에 모델 클래스 만들기(여기에 뭔가 변화가 있으면 새로 makemigrations해줘야함)
+2. makemigrations : $ python manage.py makemigrations
+3. migrate : $ python manage.py migrate 
+-> migrate 확인하는 방법) sqlite 익스텐션 설치 - db.sqlite3 파일 우클릭 - open database - sqlite explorer
+4. ORM 문법 확인 바로바로 하기 위해 쟝고 익스텐션 설치 후 실행
+   - $ pip install ipython django-extensions 
+   - settings.py-INSTALLED_APPS에 'django_extensions' 입력  
+   - $ pip freeze > requirements.txt
+   - $ python manage.py shell_plus
+5. CREATE
+   1) 첫번째 방법
+   - article = Article() : 인스턴스 생성
+   - article.title = 'first article' / article. content = 'first article content hello world!' : 인스턴스 변수 생성 후 값 할당
+   - article.save() : 값 저장
+-> 확인은 역시 sqlite explorer에서 하면 됨
+* sql 명령어로도 확인 하는 방법 알려주심! 지금은 몰라도 될듯
+  터미널에서 $ sqlite3 -> .open db.sqlite3 -> .tables -> select * from articles_article;
+   2) 두번째 방법 생략, 세번째 방법
+   - Article.objects.create(title='second article', content='second article content')
+6. READ
+   - Article.objects.all() : 전체 쿼리셋 리턴
+   - Article.objects.get(id=1) : 유티크한 값에만 쓸 것(PK)
+   - Article.objects.filter(title='fist article') : 지정된 조건에 맞는 쿼리셋 return
+   - Article.objects.filter(content__contains='title') : 검색할 때 조건을 붙이는 방법
+7. UPDATE
+   - article = Article.object.get(pk=1)
+   - article.title = 'modified title'
+   - article.save()
+8. DELETE
+   - article = Article.object.get(pk=1)
+   - article.delete()
+
+<여기부터 집중!! 나 어제 못들은 부분이다>
+120페이지까지 있는 사전준비는 이미 다 되어있음!
+p. 122 - READ1(index page)
+전체 게시글 조회해서 출력하기
+
+내가 가진 데이터를 저장할 때에는 POST method 사용!! post 요청 할때는 무조건 csrf_token 태그 같이 써줘야한다!!
+CSRF.. 요청 위조 방지..! 뭔가 서버가 가지고 있는 데이터를 변경할 때에는 csrf 토큰을 만들어서 보내주게 됨
+
+
+상세화면 보기 : detail/만 가지고는 하나의 레코드를 선택할 수 없음! variable routing으로 pk 선택하기
+articles/<pk>/detail/
+
+
+admin 사이트 들어가면 관리자 계정으로 접근 가능
+admin 계정 생성 : $ python manage.py createsuperuser
+
+
+
+
+자격증명관리 -> 일반자격증명 -> git https://lab.ssafy.com 제거하면 됨! 

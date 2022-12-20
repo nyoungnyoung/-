@@ -1,0 +1,141 @@
+오늘의 목표 : 관계형 데이터베이스에서의 외래키 속성을 사용해 모델 간 N : 1 관계 설정하기!!
+
+<RDB 복습>
+- 데이터를 테이블, 행, 열 등으로 나눠 구조화 하는 방식
+- RDB의 모든 테이블에는 행에서 고유하게 식별 가능한 기본키(PK)라는 속성이 있다
+- 외래키(FK)를 사용하여 각 행에서 서로 다른 테이블 간의 관계를 만드는 데 사용할 수 있음
+- 관계 : 테이블 간의 상호작용을 기반으로 설정되는 여러 테이블 간의 논리적인 연결
+
+<테이블 간 관계 예시>
+고객 정보의 기본 키(PK)인 고객 id정보를 가져와서 사용 -> 외래키(FK)
+
+<RDB에서의 관계>
+1. 1:1 -> 실제 데이터베이스 다룰 때는 거의 사용될 일이 없다!
+2. N:1 -> 오늘의 메인 주제!! 한 테이블의 0개 이상의 레코드가 다른 테이블의 레코드 한 개와 관련된 경우
+	ex) 주문테이블(한 테이블)과 고객 테이블(다른테이블) -> 주문(N) 고객(1)
+	여러 개의 주문 입장에서 각각 어떤 주문에 속해 있는지 표현해야 하므로
+	고객 테이블의 PK를 주문 테이블에 FK로 집어 넣어 관계를 표현함!
+3. N:N -> 다음주!
+
+<Foreign Key : 외래키>
+- 한 테이블(주문)의 필드 중 다른 테이블(고객)의 행을 식별할 수 있는 키
+- 참조하는 테이블에서 1개의 키, 참조되는 측 테이블의 기본키(PK)를 가리킴
+- 참조하는 테이블의 행 1개 값은 참조되는 측 테이블의 행 값이 대응됨!
+ex) id가 4인 고객이 없다면 주문 내역에 id 4인 FK가 들어올 수 없음
+- 키를 사용해 부모 테이블의 유일한 값을 참조(by 참조 무결성)
+- 외래 키의 값이 반드시 부모 테이블의 기본키일 필요는 없지만, 반드시 유일한 값이어야 함!
+
+<참조 무결성>
+- 관련된 2개 테이블 간의 일관성을 의미
+- 외래 키가 선언된 테이블의 외래키 속성 값은 부모가 되는 테이블의 기본 키 값으로 존재해야함
+
+{N:1 - Comment:Article}
+- Comment(댓글) 모델과 Article(게시글) 모델 간 관계 설정 
+- 댓글은 게시글에 종속되어 달리게 됨! 0개이상의 댓글이 1개의 게시글에 작성될 수 있음
+- 쟝고로 뭐 하기전에 무조건 가상환경 설정부터!!
+	$ python -m venv venv : 가상환경 설치 / $ source ..(상위폴더)/폴더/어쩌고저쩌고/venv/Scripts/activate : 가상환경 실행
+	vs코드 접속 후 ctrl + shift + P - 'interpreter'검색 후  파이썬 인터프리터 - venv 가상환경 선택
+- venv에 설치된 패키지 목록 설치 
+	$ pip install -r requirements.txt : 패키지 목록 설치 / $ pip freeze > requirements.txt : 패키지 목록 작성 
+
+<Django Relationship fields>
+- 현재 두개의 앱(accounts/articles) 존재, comments(댓글)은 articles와 관련되어 있음!!
+- articles의 models.py에 들어가보면 지난 쟝고 시간때 했던거처럼 Article모델의 스키마(타입-모델필드&제약조건-모델필드의 옵션)가 설정되어 있음!
+- 지금 해야할 것은 Content 스키마 새로 작성하는것! 
+1. OneToOneField() - 1:1 관계
+2. ForeignKey(to, on_delete, **options) - N:1 관계
+   - 쟝고 모델에서 RDB의 외래키 속성 담당
+   - 2개의 필수 인자(참조하는 모델클래스, on_delete옵션)
+   - on_delete : 외래키가 참조하는 객체가 사라졌을 때, 외래키를 가진 객체를 어떻게 처리할지 정의, 데이터 무결성을 위해 매우 중요한 설정
+     	* CASCADE : 부모객체(참조 된 객체)가 삭제되었을 때 이를 참조하는 객체도 삭제되는것(수업에서는 이거만 사용할 예정)
+   	ex) 1번 게시글에 10개의 댓글이 달려있었는데, 1번 게시글이 삭제되었을 때 밑에 딸린 10개의 댓글도 삭제되는거!
+	* PROTECT, SET_NULL, SET_DEFAULT 등 여러 옵션이 존재하긴 함
+3. ManyToManyField() - N:N 관계
+
+<Comment Model>
+1. articles의 models.py에 Content 스키마 작성하기!
+	- article = modles.ForeignKey(Article, on_delete=models.CASCADE)
+	- 외래키 필드는 ForeignKey 클래스를 작성하는 위치와 관계 없이 필드 마지막에 작성됨!(테이블 마지막 컬럼에 작성된다는 뜻)
+	- ForeignKey() 클래스의 인스턴스 이름(여기서는 article)은 참조하는 모델클래스 이름의 단수형으로 작성하는 것을 권장함
+	- 데이터 무결성 : 데이터의 정확성과 일관성을 유지하고 보증하는 것(개체무결성/참조무결성/범위무결성)
+2. models.py를 수정했으니까 migration하기!
+	$ python manage.py makemigrations (0002_comment.py 생성 확인)
+	$ python manage.py migrate (db.sqlite3 우클릭 후 opendata 해보면 articles_comment 테이블 생성되어 있음! '앱이름_모델명'으로 생성)
+	- ForeignKey()로 작성된 컬럼 이름이 article_id(아까 참조하는 모델클래스 이름을 단수형으로 작성하라고 한 이유!)
+3. 댓글 생성 연습하기
+	$ python manage.py sqlmigrate articles 0002 로 SQL문 미리보기 가능
+	- 쟝고 익스텐션이 설치되어 있으니까 shell_plus 실행시켜서 인스턴스 만들어보자! OOP개념으로 돌아옴
+	$ python manage.py shell_plus
+   1) 첫번째 댓글 작성하기
+	- comment = Comment()
+	- comment.content = 'first comment'
+	- comment.save()
+	- 하면 에러 발생함 : article이 없는데 댓글을 생성하려고 했기 때문임(not null 제약에 걸린거)
+	- article = Article.objects.create(title='title', content='content') -> save까지 포함된거
+	- article.pk로 조회해보면 결과 '1' 1번 게시글 생성된거!
+	- comment.article = article 로 article이라는 객체를 comment의 외래키(article)에 그대로 넣어줌
+	- comment.save() : 정상적으로 저장됨!
+	- comment.pk로 조회해보면 1출력됨! 
+	- comment.article_id로 조회해도 1, comment.article.pk로 조회해도 1 출력된다!
+	- comment.content로 조회하면 댓글의 내용 'first comment' 출력
+	- comment.article로 조회하면 이 댓글이 어떤 게시글에 달렸는지 article 객체 출력됨! <Article:title>
+	- comment.article.content로 조회하면 이 댓글이 달린 게시물의 내용 조회가능 'content'
+   2) 두번째 댓글 작성하기 
+	- comment = Comment(content='second comment', article=article)
+	- comment.save()
+	- comment.pk : 2출력
+	- comment 테이블 확인해보면 2개의 댓글 작성되어있음!
+
+<관계 모델 참조>
+- 생성은 했고, 두 테이블이 연결이 되었으니까 이제 서로가 서로를 조회할 수 있어야 함!
+- N에서 1을 참조하는 방법은 이미 해버렸다 : comment.article (외래키가 있으니까 바로 조회가능)
+- 1에서 N을 참조할때(역참조)가 문제임! 왜? PK를 N이 들고 있기 때문(1쪽은 전혀 바뀐게 없기 때문임)
+- 외래키가 없는 친구가 본인이 갖고있는 외래키를 들고있는 애를 참조하는 것을 보고 역참조라고 함
+- Related manager를 통해 queryset api 사용하게 됨!
+1. 역참조
+	- Comment(FK) --- 참조 ---> Article
+	- Comment(FK) <--- 역참조 --- Article
+	- 외래키를 가지지 않은 1이 외래키를 가진 N을 참조하는 것
+2. article.comment_set.method()
+	- Article 모델이 Comment 모델을 참조(역참조)할 때 사용하는 매니저
+ 	- Article 클래스에는 Comment와의 어떠한 관계도 작성되어 있지 않기 때문에,
+	- 댓글 객체를 참조하려면 comment_set 매니저가 필요함
+3. Related manager 연습하기
+   1) 1번 게시글 조회하기
+	- article = Article.objects.get(pk=1)
+	* dir(인스턴스명) : 해당 인스턴스가 사용할 수 있는 모든 메서드 출력됨! dir(article) 출력해보면 comment_set이 있음!
+   2) 1번 게시글이 가지고 있는 모든 댓글 조회하기
+	- article.comment_set.all() : <QuerySet [<Comment: first comment>, <Comment: second comment>]>
+	- 이걸 활용하면 detail페이지에서 1번 게시글이 가지고 있는 모든 댓글을 출력할 수 있겠다!
+   3) 1번 게시글에 작성된 모든 댓글 출력하기
+	- comments = article.comment_set.all()
+	- for commmet in comments:
+		print(comment.content)
+	- 이걸 뷰함수나 템플릿에서 응용하게 되는거!!
+4. ForeignKey 옵션 related_name
+	- 역참조시 사용하는 매니저 이름(comment_set)을 변경할 수 있음!
+	- models.py에 변경 사항 생기는 것이기 때문에 작성후에 migration 과정 필요함
+	- 바꾸고나면 comments_set은 더이상 사용 불가능함! 대체되는 것임
+	- 지금 사용할 것은 아니고 그냥 이런게 있다~ 정도?
+	- 다음주에 사용하게 될거니까 알아두기
+- shell_plus 끄기 : exit 입력 
+5. admin site 등록 : articles - admin.py에 새로 작성한 Comment 모델 등록하기
+	- from .models import Article, Comment
+	- admin.site.register(Comment) : admin site에 등록(register)한다로 외우면됨
+6. admin site에서 확인해보기
+	$ python manage.py createsuperuser
+	- 사용자이름: admin / 이메일 패스 / 비밀번호 입력
+	$ python manage.py runserver 로 서버 켠 다음 한번 확인해보기
+
+<Comment 구현>
+- 모델폼... 기억나나?ㅜ 모델을 기반으로 만들어주는 폼! 모델에 작성된 필드나 조건에 맞추어 폼 생성하고 데이터 저장하는거!
+- 사용자로부터 댓글 데이터를 입력받기 위해 이 모델 폼을 만들어줄 거!
+1. CREATE
+   1 articles/forms.py에 CommentForm 작성
+	class CommentForm(forms.ModelForm):
+		class Meta:
+        			model = Comment
+        			# fields = '__all__'
+        			exclude = ('article',)
+
+어우 여기부터는 그냥 교재 보면서 중요한 내용만 필기하자... 앵간히 교재에 다 나와있는듯?

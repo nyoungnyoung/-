@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+    <div>
+        <form action="{% url 'articles:delete' article.pk %}" method="POST">
+            {% csrf_token %}
+            <input class="btn btn-danger" type="submit" value="삭제">
+        </form>
+        <a class="btn btn-success" href="{% url 'articles:edit' article.pk %}"> 수정 </a>
+        <a class="btn btn-dark" href="{% url 'articles:index' %}">목록으로</a>
+    </div>
+    <hr>
+    <div>
+        <label>제목</label><br>
+        <h2>{{ article.title }}</h2>
+        <label>내용</label><br>
+        <p>{{ article.content}}</p>
+    </div>
+</div>
+{% endblock content %}

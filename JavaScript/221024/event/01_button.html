@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="btn">버튼</button>
+  <p id="counter">0</p>
+  
+  <script>
+    const btn = document.querySelector('#btn')
+    let cntNum = 0    // 초기값 변수 하나 설정
+
+    // 이벤트 핸들러 작성
+    btn.addEventListener('click', function (event) {
+      //console.log(event)
+      
+      // p태그에 적힌 숫자에 +1 을 하고 싶다!
+      const pTag = document.querySelector('#counter')
+      cntNum += 1
+      pTag.innerText = cntNum
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <form action="#">
+    <input type="text" class="inputData">
+    <input type="submit" value="Add">
+  </form>
+  <ul></ul>
+
+  <script>
+    const formTag = document.querySelector('form')
+
+    const addTodo = function (event) {
+      // console.log(event)
+      // form의 기본동작을 막아줘야 함(주소값이 안 변해야 하기 때문)
+      event.preventDefault()
+
+      // input 태그 선택먼저 해야함! 그리고 거기의 입력값 받아와야함!
+      const inputTag = document.querySelector('.inputData')
+      const data = inputTag.value
+
+      // trim : 공백을 다 제거하고 나서도 내용이 있을 때만 실행
+      if (data.trim()) {
+      // 가져온 값을 li 태그에 넣어줘야함!
+      const liTag = document.createElement('li')
+      liTag.innerText = data
+
+      // ul 태그 선택해서 거기 자식으로 넣어줘야함
+      const ulTag = document.querySelector('ul')
+      ulTag.appendChild(liTag)
+      // input 리셋하기
+      event.target.reset()
+    } else {
+      alert('내용을 입력하세요!')
+    }
+  } 
+
+  formTag.addEventListener('submit', addTodo) 
+  </script>
+</body>
+</html>

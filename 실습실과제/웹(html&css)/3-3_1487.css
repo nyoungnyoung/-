@@ -1,0 +1,60 @@
+.message {
+    padding: 20px 50px;
+    background-color: chocolate;
+    color: white;
+}
+
+.signin_form {
+    margin-top: 30px;
+    border: 2px solid lightgray;
+    border-radius: 5px;
+}
+
+.signin_header {
+    padding: 18px;
+    text-align: center;
+    border-bottom: 2px solid blue;
+    font-weight: bold;
+}
+
+.login_form {
+    padding: 0px 20px 20px 20px ;
+    font-weight: bold;
+}
+
+.login_input {
+    width: 98%;
+    height: 2.5rem;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+
+p {
+    margin: 15px 0px 8px 0px;
+}
+
+.username_form {
+    color: black;
+}
+
+.check_forgot {
+    padding: 0px 20px 20px 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.forgot {
+    text-decoration: none;
+}
+
+.signin_button {
+    margin: 0px 20px 20px 20px;
+    padding: 13px;
+    background-color: forestgreen;
+    border: none;
+    border-radius: 3px;
+    color: white;
+    font-weight: bold;
+    width: 93%;
+}

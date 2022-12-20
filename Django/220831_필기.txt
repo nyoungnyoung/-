@@ -1,0 +1,358 @@
+<Namespace>
+가상환경이 없다면 git bash 열어서 가상환경 생성부터 하기!!
+$ python -m venv venv
+vs코드 접속 후 ctrl + shift + P - 'interpreter'검색 후  파이썬 인터프리터 - venv 가상환경 선택
+
+* 어제 쟝고 설치 한 후에 패키지 목록을 만들었었는데, 우리가 이 서버 환경을 주고 받으려면 venv라는
+폴더를 주고 받는 게 아니라 venv에 설치된 패키지 목록을 주고받아야 함! 'requirements'파일 열어서
+거기에 나와있는 패키지들 설치해야함($ pip install -r requirements.txt)
+
+p. 5 - Namespace의 필요성
+두번째 app(pages)의 index페이지 작성해보고 어떤 문제 발생하는지 확인해보기'
+p. 7 - 2가지 문제 발생
+-> 첫번째 app(articles) 내에도 index.html이 있음(현재 페이지). 하이퍼링크 클릭 시 현재 페이지로 이동함 
+URL namespace로 해결할 예정
+-> 직접 주소를 쳐 넣어도 첫번째 app(articles)의 index페이지가 뜸..
+Template namespace로 해결할 예정
+
+<URL Namespace>
+p. 9
+articles의 urls.py / pages의 urls.py 동시에 띄워놓고 보면 path(url)의 name이 'index'로 겹치고 있음
+그래서 이걸 해결하기 위해서 app이름을 하나 더 붙이는 방법을 사용할 거임!
+어떻게 하냐? 'app_name = articles' / 'app_name = pages'
+요렇게 하고 나면 url tag가 바뀜!! 
+p. 10
+바뀐 url tag {% url app_name : 'urlname' %}
+*** 주의) app_name 설정하고 나면 url태그에 app_name 빼면 'NoReverseMatch' 에러 남 -> 요 에러는 url tag만 확인해보면 해결 ***
+html 파일 다 돌아보면서 일단 url name 다 바꿔봤는데,,, 엥? 아직도 안되는데?
+하고 봤더니 url은 잘 바뀌긴 함.. 근데 왜 안되지?
+요청은 /pages/index/를 요청했는데, 서버가 articles의 index페이지(templates)를 돌려줌...
+이게 바로 templates namespace를 사용하지 않아서 그럼!
+
+<Templates Namespace>
+p. 15
+쟝고는 기본적으로 app_name/templates/ 경로에 있는 파일만 찾을 수 있음(무조건 저 이름의 폴더 안에서만 찾을 수 있음)
+현재 articles/templates/와 pages/templates/폴더가 존재하고 있는 상황, 근데 우리가 템플릿 렌더링할 때 이 경로 다 생략해버림
+templates/뒤에 나오는거부터 작성을 하니까, 쟝고 입장에서는 articles/templates/index.html과 pages/templates/index.html을 구분할 수 없음
+그래서 이렇게 겹쳐지는 경우에는 렌더링을 해오긴 하는데, 앱의 등록 순서(settings.py에 등록한 순서)에 따라서 검색해옴
+지금 상황에서는 영원히 두번째 만든 앱(pages)의 index 페이지를 볼 수 없음... 이걸 어떻게 해결하면 좋을까?
+app_name/templates/이후부터 검색하는 쟝고의 고집을 꺾을 수는 없다!
+p. 16
+articles/templates/     /index와 pages/templates/     /index 요기 빈 공간에 물리적인 폴더를 하나 더 넣어주는 방법
+무식한 방법 같지만 이 방법밖에 없음... 보통은 앱 이름과 폴더이름 동일하게 설정함(헷갈리지 않도록)
+요렇게 수정하고 나면 articles/templates/articles/index.html과 pages/templates/pages/index.html로 주소 변경됨
+근데 쟝고는 어디부터 읽는다? templates 뒤쪽부터! 이제 앞으로 템플릿 가져올때는 그 뒤쪽주소 입력하면 됨!
+p. 17 
+렌더함수(views.py에 있음) 찾아서 수정해줘야함!
+수정하고나면 드디어 두번째앱의 index페이지가 드디어 출력된다!! 와!!!
+p. 18
+앱이 하나라면 template namespace 고려할 필요 없지만, 웬만하면 그냥 고려하는게 나음...
+
+<Django Model>
+p. 21
+쟝고의 디자인패턴이 뭐였지? MTV! 우리는 어제 T랑 V만 주구장창 배운거임!! 
+열심히 데이터 요청 받아서 데이터 주는건 해봤는데, 쟝고가 들고있는 데이터는 하나도 없었음!! 이 저장하는 기능을
+Model이라는 걸로 하게 됨!! 데이터를 구조화하고 조작하기 위한 것이 모델이다!
+
+<Database>
+모델을 이해하기 위해 최소한의 데이터베이스 개념을 배우고 넘어가려 함.
+나중에 데이터베이스 수업이 따로 있으니까 지금은 너무 깊게 다루진 않겠다! 다행이다....
+p. 23
+검색과 구조화 등 작업을 쉽게 하기 위해 데이터를 잘 정리해서 조직화시켜둔 것이 데이터베이스!
+스키마 / 테이블
+
+<스키마>
+이 데이터베이스의 뼈대, 요약본이라고 생각하면 됨! 어떻게 생겼는지 바로 확인 가능
+예시의 데이터베이스는 column이 4개고 타입이 이런거구나~
+
+<테이블>
+스키마는 테이블을 설명하고 있다. 실제 데이터베이스는 수많은 테이블로 구성되어 있음
+테이블이란? 필드와 레코드를 사용해 조직된 데이터 요소들의 집합. 어려우니까 그냥 엑셀같은거라고 생각하면 됨
+필드와 레코드가 뭐죠? 데이터베이스에서는 행과 열이라고 하지 않고 레코드와 필드라고 함!
+테이블을 관계(Relation)라고도 부름
+p. 26~28
+*** 필드(속성) : 열(column) / 레코드(튜플) : 행(row) ***
+데이터 1개가 작성되었다는 것은 '레코드' 하나가 작성되었다는 뜻임!
+'필드'는 그 데이터가 갖고 있는 속성을 의미함
+엑셀파일 하나를 데이터베이스라고 생각하면 편할듯!
+p. 29
+PK(Primary Key) : 기본 키
+우리가 데이터를 조회하고 싶다고 할 때, 데이터들의 어떤 값을 기준으로 조회해야할텐데,
+다른 데이터들과 절대 중복될 수 없는 값을 PK로 설정하면 됨
+ex) 주민등록번호
+p. 31
+쿼리(Query)
+데이터를 조회하기 위한 명령어! 쿼리를 날린다고 표현하곤 함
+ex) 2번부터 4번까지 조회해라 / 5번을 삭제해라 요런식
+데이터베이스는 딱 요만큼만 할거고 이제부터 다시 쟝고 모델 이야기로 넘어가보겠다!
+
+<Model>
+p. 33
+모델은 데이터를 컨트롤 할 수 있게 도와주는 도구 같은거라고 설명했었음.
+사용하는 데이터들의 필수적인 필드(컬럼)들과 동작(인스턴스->메서드)들을 포함
+필드와 인스턴스를 이용해서 데이터베이스의 구조를 잡는 거라고 생각하면 됨!
+모델 클래스 1개를 만드는 것은 데이터베이스 테이블 1개를 만드는 것!
+p. 34
+*** 모델(쟝고에 포함됨) != 데이터베이스(쟝고에 포함되지 않음, 독립적으로 존재)
+모델을 통해 데이터베이스에 접속하는거라고 생각하면 됨!
+
+<Model 작성하기>
+p. 36 - 두번째 쟝고 프로젝트!
+1. 가상환경 설정!($ python -m venv venv)
+2. 인터프리터 설정(Ctrl + Shift + P - interpreter 검색 - venv 선택)
+3. 쟝고 설치($ pip install django==3.2.13)
+4. 패키지 작성($ pip freeze > requirements.txt)
+후 시작하면 된다!! 항상 쟝고 프로젝트 만들면 위 4가지 먼저 해야함!!
+
+5. 쟝고 프로젝트 생성($ django-admin startproject crud .)
+6. 앱 생성($ python manage.py startapp articles) 후 앱 등록(프로젝트 파일crud-settings.py-INSTALLED_APPS 내에 'articles' 입력)
+   *** 앱 등록부터 하고 생성하려 하면 안된다는것 명심할 것!!
+
+p. 37 - 이제부터 model작성 시작한다!
+7. 생성한 앱 파일 내 Models.py 열어보기(기본적으로 모듈이 import 되어있음-그렇다는건 얠 필수적으로 쓰겠다는 뜻!)
+8. 하나의 테이블 스키마를 만들기 위해서는 하나의 클래스가 필요함! - class Article(models.Model)
+   이 클래스는 상속을 받는다! 어떤 클래스의 상속을 받느냐?
+   저 위에 import되어있는 models라는 모듈안에 model이라는 클래스를 상속받을거!
+   상속을 받았으니까 부모가 가지고 있는 모든 속성을 다 가져온다(model클래스의 속성)
+   우리가 이제 해야할 거는 필드를 정의하는 것!
+9. 클래스 변수(title)가 하나의 필드가 됨! 필드마다 데이터타입을 지정해 주어야하는데,
+   그 타입들은 또 models모듈안에 CharField라는 클래스로 이미 정의되어 있음!
+   title = models.CharField(max_length=10)    -> 클래스를 통한 인스턴스 생성
+   (title : 필드 이름 / models.CharField() : 타입 - 데이터베이스의 스키마를 만들고 있는 중)
+   content = models.TextField()    -> 역시 클래스를 통해 인스턴스 생성한 것
+   근데 아까랑 다르게 TextField라는걸 쓰는데, 아까 걔랑 얘랑 문자열 타입인건 똑같음
+   CharField()는 길이 제한이 있는 필드임. 그래서 필수 인자로 max_length를 받음!! TextField()는 길이제한x
+-> 모델 클래스를 작성하는 것 = 테이블의 스키마를 정의하는 것
+** 어? 근데 데이터베이스의 필수요소라고 했던 PK(기본키)는 작성 안했는데요?? id컬럼은 테이블 생성시 자동으로 생성됨!
+** 요 Article이라는 클래스로 id | title | content 요렇게 생긴 테이블이 만들어지는것!!
+
+그러면 우리가 작성한 이 코드가 어떤 의미를 갖고 있는지 하나씩 이해해보자!
+p. 38 - Article(model.Model)
+우리가 앞으로 모델들을 계속 늘려갈건데, 어떤 모델이든 상속을 받아야 온전한 기능을 수행할 수 있다!!
+클래스 상속 기반 형태의 쟝고 프레임워크 개발(이미 잘 만들어진 도구들을 가져와서 사용하는것!)
+p.39 - class를 이용해, Article이라는 테이블 내에 어떤 DB필드(컬럼)을 정의할 것인지 정의
+Article에 어떤 데이터 구조(스키마/뼈대)가 필요한지 정의
+클래스 변수인 title과 content는 DB필드(컬럼의 이름)를 나타냄!(p. 40)
+클래스 변수 값인 models모듈의 Field클래스는 DB필드의 데이터타입을 나타냄(p.41)
+                     ex)models.CharField(max_length=10) / models.TextField()
+
+<쟝고 모델 필드>
+p. 42
+데이터 유형(INT, TEXT 등)을 정의, 하나하나 외우기 힘들기 때문에 공식문서 들어가서 찾아가지고 사용하는 습관 들이기
+https://docsdjangoproject.com/en/3.2/ref/models/fields/ 에서 다양한 쟝고 모델필드 확인 가능
+오른쪽 contents(목차)에서 내가 원하는 내용 서칭해서 보기, 몽땅 다 외워버리겠다는 마인드X!
+내가 필요한 부분만 찝어서 보겠다!
+ex) DataField(), CharField(), IntegerField()...
+p. 43 - CharField(max_length=None, **options)
+길이 제한이 있는 문자열(최대 255까지 가능)
+사용자가 max_lenght를 초과해서 데이터를 보내려고 할 때 유효성 검사하는 데 활용함
+p. 44 - TextField(**options)
+글자 수가 많을 때 사용함
+오잉 그럼 무한인가?? ㄴㄴ 데이터베이스를 어떤거 사용하냐에 따라 다름!
+쟝고는 sqlite가 기본인데, oracleDB나 MySQL 이런거 사용할 수도 있어서 그거에 따라 최대치가 달라짐
+sqlite의 최대 문자열 길이는 2**31 -1이라고 함
+얘는 max_length 옵션 써도 별 의미가 없다!
+
+p. 45 - 현재까지 작성한 데이터베이스 스키마(class 이용해서 작성함)
+여기까지 클래스를 열심히 만들었는데, 실제 데이터베이스에 이 클래스를 어떻게 적용할건지라는 마지막 과정이 남음!
+모델은 열심히 만들었지만 데이터베이스는 비어있는거기 때문에!!
+
+<Migrations>
+p. 34 그림 참고! models.py에서 클래스를 만들었으니까, 실제 데이터베이스에 반영을 해야함!! 이 과정을 Migrations라고 함!
+p. 48 - Migrations 관련 주요 명령어*****중요중요!!(makemigrations/migrate)*****
+p. 49 - Makemigrations
+쟝고 명령어는 언제나 python mange.py 를 기점으로 명령어를 실행함!! ($ python manage.py makemigrations)
+실행하면 articles - migrations -__pycache__- 0001--initial.py 파일 생성됨. 이게 migrations파일!!
+간단 정리) models.py에 class 작성 -makemigrations명령어-> 0001_initial.py(마이그레이션 파일-설계도, 청사진, blueprint)
+아직 DB에 테이블이 생긴건 아님!! 데이터베이스랑 소통한적이 없다 아직은!!
+
+<migrate>
+p. 51
+makemigrations로 만든 최종설계도를 모델의 변경사항과 함께 데이터베이스에 보내는것!! 
+모델과 데이터베이스를 동기화시키는것! ($ python manage.py migrate)
+명령어 실행하면 쟝고가 알아서 마이그레이트 해줌!
+그러면 이 데이터베이스는 어디에 있느냐?? 'db.sqlite3' 파일에 저장됨!!
+열어볼건데 그냥은 못열고 확장프로그램 하나를 설치해주어야 한다. 'sqlite' 설치!
+이후에 db.sqlite3 파일 우클릭-open Database 선택하면 왼쪽 하단에 'sqlite explorer'라는 칸이 생김
+눌러서 db.sqlite3 눌러보면 테이블 여러개가 쫘라락 뜬다!!
+'앱이름_클래스이름'의 테이블이 우리가 방금 생성한 테이블이다!! 눌러보면 스키마 정보 뜸ㅎㅎ
+오른쪽 화살표 눌러보면 데이터 출력됨! 지금은 아직 데이터 입력을 안해서 비어있을거임!
+
+<Migrations 기타명령어>
+p. 53 
+- showmigrations($ python manage.py showmigrations) migrations 파일이 잘 migrate 됐는지 확인하는 용도!
+- sqlmigrate($ python manage.py sqlmigrate articles 0001) DB환경에서는 SQL이라는 언어를 사용하는데,
+  우리가 만든 설계도는 파이썬으로 만든거! DB는 파이썬을 알아먹지 못하기 때문에, SQL로 바꿔주는 작업이 일어날텐데
+  이 명령어를 통해 SQL언어로 어떻게 바뀌는지 확인하는 명령어임!
+
+<추가 필드 정의>
+p. 60 - 작성시간 / 수정 시간 컬럼을 추가하고 싶다! 어떻게 하면 되지?
+models.py의 Article 클래스 내에 아래와 같이 작성(DateTimeField()는 날짜/시간형태)
+- created_at = models.DateTimeField(auto_now_add=True)
+- updated_at = models.DateTimeField(auto_now=True)
+*** 마이그레이션 작업은 항상 models.py에 변경이 있을 때 해 주어야 함!!
+그러면 다시 설계도 만들어야 하니까 makemigrations 명령을 수행해볼까?
+하고 명령어 입력하면 아까랑 좀 다름.. 호락호락하지 않다;;
+p. 62 - 쟝고의 입장에서 생각해보자...
+데이터베이스에 기본적으로 빈 값을 넣을 수 없음!! 그래서 기본값을 뭘로 할건지 물어보게 됨
+p. 63 - 선택지의 의미
+1) 지금 입력하는 값을 기본값으로 넣어
+2) 이 대화에서 나가서 class코드 안에다가 default값을 넣을게!
+우리는 1번을 선택할거임! 왜? 1번 눌러보면 '엔터 치면 timezone.now 모듈을 기본값으로 설정할게~' 라는 내용을 쟝고가 띄워줌
+이 필드의 DateTimeField라는 타입에 맞는 파이썬 모듈을 알아서 넣어준다고 하는거임
+p. 65
+그래서 엔터 치고나면 이제 0002로 시작하는 migration 파일이 생성됨
+확인해보면 0001 설계도랑 다르게 dependencies(의존)에 0001 migration파일이 들어가있음
+무조건 의존성이 생기는건 아님!! 0001 설계도랑 관련이 있으니까 dependencies에 뭔가 들어가는거!
+그러면 왜 0001 0002 0003 이런식으로 쌓아나가게 되는걸까?? git이랑 똑같다고 보면 됨! 뭔가 문제가 생겼을때
+문제없이 돌아갔던 설계도로 다시 복구하려고!
+p. 66 - 설계도 새로 만들었으니까 설계도를 반영해주기
+
+***** 시험에 나오기 너무 좋아보임ㅋㅋㅋㅋ*****
+p. 68 - DateTimeField()설명
+선택인자
+auto_now_add : 최초 생성일자(데이터가 만들어질 때 현재 날짜와 시간으로 자동으로 설정됨)
+auto_now : 최종 수정일자(데이터가 수정될 대마다 현재 날짜와 시간으로 자동으로 갱신됨)
+* DB의 컬럼 5개 중에 id/작성시간/수정시간은 내가 입력하지 않음
+
+p. 67 - 반드시 잊지 말아야 할 migration 3단계
+1. models.py에 변경사항 생기면
+2. makemigrations(migrations파일 생성)
+3. migrate(DB반영)
+
+<ORM>
+p. 54
+쟝고가 DB한테 migrate를 아무리해도 DB는 엥 ?? 뭔소리지? 함(파이썬으로 작성하니까)
+DB가 SQL로 쟝고한테 응답을 줘도 쟝고는 엥?? 뭐지?? 함
+그러면 중간에 번역자가 필요하겠네 > 얘가 ORM임
+p. 56
+Object-Relational-Mapping(객체지향매핑)
+우리가 지금 파이썬이라는 객체지향 프로그래밍언어를 사용하고 있는데, 호환되지 않는 유형의 데이터베이스를 연동시키는 프로그램
+p. 57 그림의 쟝고 부분만 우리가 수정하면 됨. SQL을 잘 몰라도 파이썬으로 DB조작이 가능하다는 장점
+하지만 ORM만으로 세밀한 데이터베이스 조작은 하기 힘든 경우가 많음
+근데도 왜 ORM을 사용하냐? 빨리빨리 개발 하려고ㅇㅇ
+
+p. 71
+<QuerySet API>
+ORM이 사용하는 메서드들의 이름
+p. 73 - 사전 준비 사항 (orm 문법을 입력하고 결과를 바로바로 보기 위해서 설치하는거임)
+$ pip install ipython django-extensions
+외부 라이브러리 설치했으면 등록도 해 줘야함(settings.py-INSTALLED_APPS에 'django_extensions' 입력해주기)
+그리고 패키지 requirements도 업데이트 해줘야함(
+$ pip freeze > requirements.txt
+p. 74 - 방금 설치한 라이브러리들이 하는 일(ipython 내에 django-extensions는 오타임 지워도 됨)
+p. 75 - 사용자와 운영체제 간의 셸, git bash가 셸 중의 하나임! 
+p. 76 - python shell : 파이썬 코드와 소통하는 셸(파이썬 코드를 한줄씩 읽어내려가면서 실행하는 셸)
+원래는 python -i 로 기본 셸 사용하는데, 좀 더 가독성을 좋게 하기 위해서 ipython 실행하는거!
+p. 78 - django shell 실행 : 쟝고 환경 안에서 테스트를 해보자는 거!
+실행해보면 from ~ import ~ 이런식으로 쟝고 내의 클래스들 전부다 import 해옴(와편하다!셸플러스 쓰는이유)
+p. 79 - Article.objects.all() : DB한테 Article 클래스의 전체 데이터를 다 내놔! 하는거(조회)
+         결과) <QuerySet []> : 우리가 아직 입력해놓은 데이터가 없으니까 빈 리스트로 나옴
+p. 81 - Model을 정의하기만 하면 쟝고가 자동으로 API를 제공함
+p. 82 - Database API구문 : Modelclass.objects(manager).***QuerysetAPI*** 얘가 중요함!!
+p. 83 - objects(manager) : 쿼리셋API를 이용할 수 있도록 도와주는거, 자동으로 생성되니까 신경안써도 됨
+p. 84 - Query 중요한건 얘!! 쿼리문을 작성한다 : 데이터를 얻기 위해 데이터베이스에 요청 보낼 코드를 작성한다
+p. 85 - QuerySet : 데이터베이스에게서 전달받은 객체 목록'[ ]' (순회 가능한 데이터-인덱스로도 접근가능)
+	            데이터베이스가 단일 객체를 반환할 때에는 QuerySet이 아니라 모델(class)의 인스턴스로 반환
+p. 86 - QuerySet API : 쿼리셋과 상호작용하기 위해 사용하는 도구(메서드/연산자) *** 여기에 있는 이 그림을 이해하면 될듯***
+
+p. 87
+<QuerySet API 익히기>
+p. 89 - CRUD(Creat/Read/Update/Delete) 소프트웨어의 모든 기능은 crud를 벗어나지 않음
+
+p. 90
+<CREATE>
+첫번째 방법 - p. 92~94
+1. article = Article() : 인스턴스 생성
+2. article.title : 변수명과 같은 이름의 인스턴스 변수 생성 후 값 할당
+   ex) article.title = 'first' / article.content = 'django'
+3. article.save() : 인스턴스로 save 메서드 호출
+   article 입력해서 결과값 확인해보면 <Article: Article object (1)> 로 바뀌어있음! 저 숫자가 의미하는것은 id였다!
+   save를 하지 않으면 아무리 값을 넣어도 db에는 반영되지 않는다. save할 때 id가 부여됨!!
+진짜 저장됬는지 데이터 확인해보자!!(sqlite explorer-articles_article열어보면 테이블 생성되어있음!! 우와 짱신기)
+한국 시간으로 변경해도 데이터베이스에 저장될때는 UTC가 기본임. 데이터 받아올때 한국시간으로 읽어오게 됨
+두번째 방법 - p. 95
+1. 첫번째 방법의 1. 인스턴스 생성 시 초기 값을 함께 작성하여 생성
+ex) article = Article(title='second', content='django!')
+2. 얘도 마찬가지로 save해줘야 저장됨!
+요렇게 저장한 애들은 article.title / article.content 로 확인해볼 수 있음!
+article.id로 id도 확인해볼 수 있는데, 얘랑 article.pk(얘를 더 권장함)랑 동일하게 작동함!!
+세번째 방법 - p. 96
+1. QuerySet API 중 create() 메서드 활용(얘는 save와 return을 포함하고 있음!) 
+ex) Article.objects.create(title='third', content='django!')
+Out) <Article: Article object(3)>
+p. 97 - save()
+
+p. 102
+<READ> crud에서 가장 중요한 것!!(조회)
+p. 103 - 조회는 쿼리셋을 받느냐 쿼리셋을 받지 않느냐(단일객체)에 따라 2가지로 분류됨
+p. 104 - all() : 전체 데이터 return / return 한다는 건 어떤 변수에 담아서 사용할 수 있다는 뜻!
+	      데이터의 리스트였으니까 반복문도 가능하다!
+	      ex) Article.objects.all()
+	          articles = Article.objects.all()
+	          for article in articles:
+		    print(article)
+p. 105 - get() : 단일 데이터 조회 / 객체를 찾을 수 없으면 'DoesNotExist' 예외 / 둘 이상의 객체를 찾으면 'MultipleObjectsReturned'예외
+                   -> 유니크한 값에만 써라(PK)
+		ex) Article.objects.get(id=1) / Article.objects.get(pk=1) 
+		    Article.objects.get(id=100) : DoesNotExist 에러 
+		    Article.objects.get(content='django!') : MultipleObjectsReturned 에러
+p. 106 - filter() : 쿼리셋을 return하는데, 지정된 조회 조건에 맞는 애들을 return함!
+	         얘는 조회 조건에 맞는 애가 없거나 하나밖에 없더라도 에러가 나지 않음!(빈쿼리셋이나 하나인 쿼리셋 반환)
+	         ex) Article.objects.filter(content='django!')
+		 Article.objects.filter(title='ssafy') : <QuerySet []>
+		 Article.objects.filter(title='first') : <QuerySet [<Article : Article object (1)>]>
+		*** 주의 : pk는 filter로 접근하지 말 것!***
+		 Article.objects.filter(pk=1) : <QuerySet [<Article : Article object (1)>]> 값은 찾아주지만 이렇게 쓰면 안된다!!
+		왜? 쿼리셋으로 반환하고, id값이 일치하는 애가 없을 때 빈 쿼리셋을 반환하기 때문..
+		그냥 PK는 get으로만 조회한다고 외워두면 될듯!!
+p. 107 - Field lookups : 검색할 때 조건을 붙이는 방법!
+           https://docs.djangoproject.com/en/3.2/ref/models/querysets/#field-lookups 참고
+	ex) content에 'ja'가 들어간 애들을 검색해주세요~ : Article.objects.filter(content__contains='ja')
+
+p. 108
+<UPDATE>
+C와 R에 비해서는 간단함! 큰 틀이 바뀌는게 아니기 때문
+p. 109 - update과정
+* 수정할 때 주의사항) 수정을 하기 전에 '먼저'해야하는 것이 있음!! 뭘 수정할 지 골라야함(조회를 먼저 해야 수정할 수 있다!!)
+조회를 한 후 변수에 그 값을 저장한 후 수정해야 함!
+1. 수정하고자 하는 article인스턴스 객체를 조회 후 반환값을 변수에 저장
+   ex) article = Article.objects.get(pk=1)
+2. article인스턴스 객체의 인스턴스 변수 값을 새로운 값으로 할당해줌
+   ex) article.title = 'byebye'
+3. save() 인스턴스 메서드로 수정된 값 저장하기 -> 이때 수정시간도 변경됨!!
+   ex) article.save() 
+
+p. 110
+<DELETE>
+제일 간단함! 얘도 update랑 마찬가지로 어떤 값을 삭제할지 골라줘야하므로 조회 먼저!
+1. 삭제하고자 하는 article 인스턴스 객체를 조회 후 반환값을 변수에 저장
+2. delete() 인스턴스 메서드로 삭제하기(따로 저장해주지 않아도 됨)
+   ex) article.delete()
+그러면 이렇게 삭제하고 난 다음에 또 다른 데이터를 넣어주면 pk 1번에 저장될까 4번에 저장될까? : 4번에 저장됨(차곡차곡!)
+삭제된 값은 재사용하지 않음!!
+
+
+p. 112 - __str__() 
+객체 프린트 될 때 표현법 바꾸는 것! 지금 계속 결과값이 Article object(1) 이런식으로 출력되고 있으니까
+이걸 읽기 쉽게 바꾸는 거!! models.py에 Article 클래스 내부에 def __str__(self): 함수 정의! 
+함수 정의 후에 쟝고 셸도 껐다 켜야함!! exit() -> python manage.py shell_plus
+Article.objects.all() : <QuerySet [<Article: second)>, <Article: third>]> 요렇게 출력됨
+엥 근데 models.py에 변경사항 생겼는데 migration 해야하는거 아닌가요?
+셸 종료하고 makemigrations해봤는데 변화 감지 안되었다고 뜸.. 왜? DB 컬럼에 영향을 주지 않기 때문!!
+
+자 이제 그러면 CRUD 맛보기는 끝났다! 이 CRUD를 이제 views.py 들어가서 view함수 내에서 사용할거임!
+p. 115
+<CRUD with view functions>
+사전준비 - base템플릿 작성하고 url분리, 연결하고 index페이지 작성함
+
+p. 121
+<READ1>
+index page에서 게시글 출력부터 한번 해보자!
+p. 122 - 전체 게시글을 조회해서 출력하기
+실제 데이터베이스에 있는 걸 조회해서 출력하게 된 것! 엄청 큰 변화가 있었다!
+
+p. 123
+<CREATE>
+p. 125 - create 로직을 구현하기 위해 필요한 view함수는 2개!
+글을 작성할 페이지를 리턴하는 함수 / 데이터 받아서 DB에 저장하는 함수

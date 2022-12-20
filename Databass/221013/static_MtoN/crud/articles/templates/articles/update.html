@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+  <div>
+    <form action="" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <p><input class="btn btn-primary" type="submit" value="수정하기"></p>
+    </form>
+  </div>
+  <p><a class="btn btn-success" href="{% url 'articles:index' %}"> 목록으로 </a></p>
+</div>
+{% endblock content %}

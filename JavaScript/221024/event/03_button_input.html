@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .blue {
+      color: blue;
+    }
+  </style>
+</head>
+<body>
+  <h1></h1>
+  <button id="btn">클릭</button>
+  <input type="text">
+
+  <script>
+    // 요걸 활용해서 다크모드 같은 거 만들 수 있을듯!
+    const btn = document.querySelector('#btn')
+    btn.addEventListener('click', function (event) {
+    // h1 태그의 값을 blue로 토글 하겠다!
+      const h1Tag = document.querySelector('h1')
+      h1Tag.classList.toggle('blue')
+    })
+
+    // h1태그에 input에 입력한 값을 바로 넣어주겠다!
+    const inputTag = document.querySelector('input')
+    inputTag.addEventListener('input', function (event) {
+      const h1Tag = document.querySelector('h1')
+      h1Tag.innerText = event.target.value
+    })
+  </script>
+</body>
+</html>

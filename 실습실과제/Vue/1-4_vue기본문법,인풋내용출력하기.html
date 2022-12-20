@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <h1>첫번째 입력 : {{ Message1 }}</h1>
+    <input type="text" @input="onInputChange">
+    <h1>두번째 입력 : {{ Message2 }}</h1>
+    <input type="text" v-on:input="onInputChange2">
+    <h1>합산입력 : {{ add_computed }}</h1>
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      Message1: '',
+      Message2: '',
+    },
+    computed: {
+      add_computed: function() {
+        return this.Message1 + this.Message2
+      }
+    },
+    methods: {
+      onInputChange: function (event) {
+        this.Message1 = event.target.value
+      },
+      onInputChange2: function (event) {
+        this.Message2 = event.target.value
+      },
+    }
+  })
+</script>
+</html>

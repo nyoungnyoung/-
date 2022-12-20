@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+  <h3>Articles</h3>
+  <hr>
+  <a class="btn btn-success"href="{% url 'articles:create' %}">새 글쓰기</a>
+  <hr>
+  {% for article in articles %}
+  <div>
+    <p>
+      <b>작성자 : <a href="{% url 'accounts:profile' article.user.username %}">{{ article.user }}</a></b>
+      <p>제목 :<a href="{% url 'articles:detail' article.pk %}"> {{ article.title }} </a></p>
+    </p>
+    <form action="{% url 'articles:likes' article.pk %}" method="POST">
+      {% csrf_token %}
+      <!-- 현재 게시글에 좋아요를 누른 유저 목록에 현재 요청을 보낸 유저가 있으면 좋아요 취소-->
+      {% if request.user in article.like_users.all %}
+        <input type="submit" value="좋아요 취소">
+      <!-- 아니면 좋아요 버튼 출력-->
+      {% else %}
+        <input type="submit" value="좋아요">
+      {% endif %}
+    </form>
+  </div>
+
+  <hr>
+  {% endfor %}
+</div>
+{% endblock content %}

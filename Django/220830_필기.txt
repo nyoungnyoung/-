@@ -1,0 +1,208 @@
+p. 5
+Django : Web application Framework
+* 웹 어플리케이션 : 웹(인터넷)에서 동작을 수행하는 SW
+
+html : 글과 문서(정적인 문서)
+
+요즘은?
+클라이언트에 따라서 html(or data)를 생성해서 응답
+템플릿을 여러개 조합해서 html을 완성하고, 그 html을 클라이언트에게 돌려줌!
+-> 동적으로 문서를 만들어낸다음 응답하는 중! 요렇게 기능하는 걸 웹어플리케이션이라고 함
+물론 정말 간단한 웹어플리케이션이라면 정적인문서로도 구현 가능하겠지만, 보통은 동적으로 구성됨
+
+클라이언트가 서버한테 data 내놔 라고 요청하면, 일단 서버가 해야하는일(사용자의 요청을 받아 응답 하는 걸 '웹서버'라고 부름)
+1. 요청 받기 (보안, 인증, 로깅 등의 작업 수행)
+2. 데이터 생성 (html을 만들 수도 있고, 순수한 data를 생성할수도 있고!) - 'web application'이 수행하는 일
+   처리할 요청에 대한 선언 방법, 인증하는 방법, 데이터 생성하는 방법, 응답 만드는 방법 등
+   웹 어플리케이션을 만들 수 있도록 이런 방법들을 미리 만들어 둔 것이 Framework!
+   그리고 장고가 이런 framework중 하나인 것(파이썬으로 만들어진)
+3. 응답
+
+웹서버+
+웹 컨테이너(웹어플리케이션이 동작할 수 있는 환경을 조성해 주는 것)+
+동적 요소 생산 기능
+= Web Application Server(WAS)
+
+www(world wide web)
+
+IP Address(Inernet Protocall Address) 
+0~255 : 8비트(1byte)
+ex) 192.168.0.1 -> 8비트짜리가 4개있는거
+IPv4(IP version4) = 4byte(32비트), 약 43억개의 주소값 만들 수 있음
+-> 부족해서 IPv6 = 6byte 나옴
+
+p. 35
+디자인패턴
+많이 사용하는 구조를 미리 구현해둔것
+p. 43
+장고의 디자인 패턴 : MTV(Model Template View)
+MVC(Model View Controller)에서의 view랑 MTV에서의 view는 살짝 다름
+기존의 MVC패턴에서 살짝 발전시켜서 MTV패턴이 됨! 순서 동일하게 매칭됨
+
+ex) class 학생 (학번 / 이름 / 전공) - > 데이터 집어넣으면 학생 하나의 정보가 생성되는 형식  
+Value Object(or DataTransferObject or Model Object)
+요 과정 전체를 CRUD(Create Read UPdate Delete)라고 함. 이런 기능을 하기 위해 만들어놓은 것들을 통틀어서 Model이라 함
+
+레이아웃을 완성하는 로직을 갖고 있는 걸 view,
+
+아래와 같은 요청이 들어왔을 때
+/index : 메인화면 보여줘
+/articles : 게시글 보여줘
+/articles/writer : 작성양식 보여줘
+controller가 이 요청은 너가 처리해, 저 요청은 너가 처리해 이렇게 구분해줌 
+
+p. 50 그림의 흐름 별 50개
+
+p. 56 장고 설치
+p. 58 장고 파일 만들기($ django-admin startproject 파일이름 .) 마지막에 '.' 붙이면 현재 폴더 내에 그대로 생성, 안붙이면 새 폴더 하나 만든다음에 그 안에 파일 만들어짐
+manage.py라는 파일 만들어지는데, 이게 장고 실행할 수 있는 파일임(실행 할 때 $ python manage.py runserver)
+나오는 서버주소 ctrl + 클릭하면 웹사이트 열림!
+
+p. 60 프로젝트 구조
+프로젝트 폴더(프로젝트 전반적인 설정을 할 수 있는 폴더)
+   __init__.py 패키지라는걸 상기시켜주는 파일!
+   asgi.py 사용안할거니까 그냥 패스하심
+   settings.py 프로그램의 전반적인 설정을 여기다가 집어넣음. 많이 사용한다하심!
+   urls.py 얘도 많이 사용한다고 함!! 요청 분배기 역할을 하는게 urls.py
+manage.py 전반적인 장고 내에서의 명령어들을 선언해 둔 파일! 얘도 자주 사용!!
+----- 여기까지 기본 생성 -----
+p. 66 어플리케이션 생성($ python manage.py startapp articles-어플리케이션이름)
+articles 폴더
+   settings.py - INSTALLED_APPS 내에 내가 만든 어플리케이션 이름 적어주기 (p. 72)
+	       주의) p. 74 미리 이름 적어놓으면 앱 생성이 안되니 앱 생성 후 이름 적기
+
+
+p. 78
+firstpjt - urls.py 내 urlpatterns 안에 path('처리할 URL/', 실행할 메서드) 입력! path('index/', views.index)
+	from articles import views(여기에 입력한 메서드는 views.py에서 받아옴!)
+p. 79
+articles - views.py 내에 index 함수 생성
+	def index(request):
+	       retun render(request, 'index.html')
+	# 첫번째 인자는 request, 반환값은 HttpResponse
+	# render 함수의 역할 : template를 이용해 HttpResponse를 만들어냄
+	# render(request, 템플릿 경로[, context(=data)])
+여기까지 정리하면- index라는 명령이 들어오면, articles이라는 앱이 가지는 views.py에서 index라는 메서드를 실행할 것이다!
+p. 81
+articles - templates(폴더 만들기) - index.html(파일 생성) 후 사진처럼 입력
+
+요기까지 p.82에 정리되어있음
+
+p. 83 로컬라이징 할 수 있는 세팅 방법 나와있음!
+p. 87 html과 파이썬으로 작성하고 있지만, 장고 템플릿 시스템임!
+p. 88 DTL(Django Template Language)도 프론트엔드 개발언어라고 할 수 있음
+파이썬 파일에서 작성하는게 백엔드 / html 파일에서 작성하는게 프론트엔드
+* 프론트엔드 개발언어(JSP, ASP, PHP - html + 문법 / 얘를 완성시키는게 결국 서버이기 때문에 '서버사이드 언어'라고 함)
+
+p. 89 DTL Syntax(DTL의 문법) - 변수 / 필터 / 태그 / 코멘트
+p. 91 변수 - 렌더()dml 세번째 인자, {'key' : value}와 같은 딕셔너리 형태로 넘겨주게 되고 key가 template에서 사용 가능한 변수명이 됨!
+p. 92 필터 - 변수를 수정할 때 변수명 뒤에 'or연산자('|') + 필터명' 형태로 출력
+	    built-in filter 60개 정도 있으니까 docs 검색해서 한번 사용해 보는것도 좋을듯
+	    ex) hello | join:'' | lower
+p. 93 태그 - {% tag %}
+p. 94 코멘트(주석) - {# #}
+
+<실습>
+p. 95 /greeting -> greeting.html 실행하도록 
+/lotto -> lotto.html 실행되면서 임의의 6가지 숫자 표시되게 만들기
+
+<템플릿 상속-부트스트랩 전부 다 적용하고 싶어! 요런 느낌..?>
+p. 103 base라는 이름의 skeleton 템플릿 만들기
+p. 105 ***** 시험에 자주 출제 됨*****
+원래 장고 템플릿의 기본경로는 app(지금은articles라는 폴더)/templates임!!
+그래서 base.html을 다른폴더로(project/templates) 옮겼을 때 이걸 못찾게 됨... 똥멍청이네ㅜ
+이걸 해결하기 위해서 settings.py에 가서 설정을 좀 변경해줘야함! 다른곳에도 templates 있으니까 확인해봐라~~
+'APP_DIRS' : True - app 내의 디렉토리를 찾아볼거니? ㅇㅇ
+'DIRS' : [BASE_DIR/'templates,'] - BASE_DIR(p.107 제일 기본 폴더, 여기서는 '220830_startpjt' 폴더) 내의 templates폴더도 찾아봐라
+ 
+<Sending and Retrieving form data - 폼 데이터 보내고 가져오기>
+1. client가 서버한테 양식내놔라고 함
+2. 서버가 클라이언트한테 옛다 양식 하고 폼 형태를 줌
+3. 클라이언트 컴퓨터에 양식(폼) 띄워짐 ex. 로그인 폼
+4. 클라이언트가 아이디/비번 입력 후 로그인 버튼으로 로그인 요청함(이때 ID/PW 정보를 서버가 받아와야 로그인처리 가능)
+5. 서버가 받아온 정보를 바탕으로 점검 후 요청에 응답
+
+<sending for data(client) - 데이터 전송(클라이언트가 데이터 입력함)>
+p. 113
+/throw (Form요청 - 데이터를 던질 수 있는 폼을 내놔라!)
+/catch (서버로 전송요청 - 로그인 버튼 눌렀을 때! - 데이터를 내가 던질테니까 받아봐라!!)
+p. 115 /throw 메서드 만들기
+throw.html에서 extends, block 입력하고 그 안에 폼 작성하기
+<form action="데이터를 보낼 url(우리는 catch/로 보낼거임)" method="GET">
+*** 여기서 말하는 GET은 내 요청의 목적? 정도로 보면 될거같다고 하심(서버가 가진 데이터를 갖겠다!)
+*** 이런이런 데이터를 내놓아라 요청을 보내면 서버가 응답을 하는데, 
+*** 그 응답으로 나오는 데이터를 가져오는(GET)거니까!!
+*** GET요청의 특징 : 내가 보낼려고 하는 데이터가 url에 표시됨(query-string형태로 ex) '?Key=Value') 
+*** 뭔가 더 궁금한게 있으면 구글에 HTTP GET 검색해서 MDN 확인해보기~~
+*** POST라는 메서드도 있음!! 이것도 검색해보면 좋을듯(해킹같은걸 막기 위해서 토큰과 함께 같이 보내게됨 csrf token 메서드)
+input 태그 내 name이 key값이 됨
+p. 123 쿼리스트링파라미터
+?key=value&key=value&key=value 이런식으로 데이터를 파라미터를 통해 넘기는거! 
+p. 127 /catch 메서드 만들기
+catch.html에서 extends, block 입력하고 message 변수 입력(아까 throw에서 input에 입력한 값)
+views.py에서 catch함수 작성하기 - 클라이언트가 보낸 데이터를 받아서"request.GET.get('message')" 템플릿으로 보내야함
+
+<Trailing URL Slashes>
+그냥 장고는 꼭 /가 자동으로 붙어준다! 정도만 알아두면 됨
+
+<Variable routing>
+p. 143
+URL 주소를 변수로 사용하는 것을 의미함!
+ex) /articles/1/
+     /articles/2/
+     /articles/3/
+  -> 1, 2, 3이라는 변수만 달라질 뿐, 요청하는 작업은 똑같음! variable routing작업을 안해주면 
+      urls.py에서 이 명령을 하나하나 실행해야하므로 variable routing을 통해 /articles/<num>/으로 처리할 수 있게 함!
+p. 145 urls.py에서 variable routing 하는방법
+path('hello/<name>/', views.hello)
+path('hello/<str:name>/', views.hello) 이렇게 하면 문자만 입력할 수 있음
+
+<APP URL mapping>
+p. 149 $ python manage.py startapp pages (pages라는 app 생성)
+어우 여기부터 놓쳤다.....ㅜㅜ
+................................................................ㅠㅠ 흑
+
+<Naming URL patterns>
+p. 159
+path('index/', views.index, name = 'index') 요런식으로 path의 name인자를 사용하면 이름 붙일 수 있음
+url이름이 바뀌면 모든 애들을 바꿔주는게 귀찮으니까, name인자 사용해서 이름 붙인다음에
+{% url 'articles.throw' %}
+
+
+
+<교수님이 전달해주신 필기!>
+Django project 생성하기
+django-admin startproject {'project name'} [.]
+application 생성하기
+(manage.py 가 있는 경로에서 ) python manage.py startapp {'app name'}
+settings.py에 application 등록하기
+요청처리하기
+처리하고자 하는 요청 urls.py에 작성하기
+application/views.py에 요청처리를 위한 메서드 작성하기
+요청처리메서드의 첫번째 인자는 항상 request 객체
+반환값은 HttpResponse,응답객체
+응답은 (일단은..) render() 메서드를 사용,
+render(request,'template 경로'[,context])
+template 작성은 각 application/templates 경로에서 템플릿을 찾으므로, application 및에 templates 폴더를 생성한다 (ex : articles/templates)
+템플릿 상속(base.html 만들기)
+템플릿 상속은 비슷 한 모양의 템플릿(반복되는 모양)을 재사용하기 위해서 사용한다.
+base.html 을 만들어서 BASE_DIR/templates에 넣어준다.
+템플릿은 application/templates를 참조하기 때문에 BASE_DIR/templates은 참조하지 못한다. 따라서 settings.py > TEMPLATES > DIR에 BASE_DIR/templates를 추가한다.
+form 요소에서 data 주고 받기
+client에서 서버로 데이터를 보낼때는 form 요소를 사용한다.
+form요소 의 input 요소를 이용하면 서버로 데이터 전송가능하다.
+form요소의 name 속성이 전송하는 데이터의 key 가 된다.
+form 요소의 action 속성은 데이터를 전송하는 목적 URL이다.
+form 요소의 method 속성은 데이터를 전송하는 방식(GET, POST)이다
+서버에서 데이터를 얻어올때(검색하기, 게시글보기,화면 요청 등)는 GET,
+서버로 데이터를 전송(게시글 작성, 로그인 등)할 때는 POST
+post요청을 보낼 때는 csrf token을 보내줘야한다(django보안 요소때문)
+variable routing 은 URL에 정보를 담아서 요청을 생성하는 방식이다.
+예) /articles/\<str:name\>/
+url naming
+path('catch/', views.catch, name='catch'), 형태로 url에 이름을 작성하므로써, 중복되는 url을 작성하는 것을 방지한다.
+url 태그를 사용하면 된다.{% url 'articles:catch' %}
+app url mapping
+모든 url을 project내에서 처리하지 않고, 각 application 마다 urls.py를 생성하여 url을 처리할 수 있도록 한다.
+project urls.py에는 path('articles/', include('articles.urls')), 형태로 url 을 전달을 위한 include 함수 사용
+application urls.py에는 처리할 url만 작성

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input type="text" id="text-input">
+  <p></p>
+  <script>
+    // 1. input 선택
+    const inputTag = document.querySelector('#text-input')
+
+    // 2. 이벤트 핸들러 부착
+    inputTag.addEventListener('input', function (event) {
+      // console.log(event)
+      // console.log(event.target) 하면 이벤트의 대상인 input이 선택되어 출력됨
+      // console.log(event.target.value) 하면 이 input에 입력되는 값이 출력됨
+
+      // p 태그 선택
+      const pTag = document.querySelector('p')
+      pTag.innerText = event.target.value
+    })
+  </script>
+</body>
+</html>
