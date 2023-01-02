@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b479b389-4aa5-42be-91dd-f49aa917c71d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../220921/220921_babygin1.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220921/220921_babygin2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220921/220921_nPn_1.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220921/220921_nPn_2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220921/220921_nPn_3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220921/220921_nPr_3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220921/220921_nPr_3_추가(한자리 고정).py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220921/220921_배열최소합.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220921/220921_배열최소합2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220921/220921_부분집합.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220921/220921_부분집합_재귀.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220921/220921_조합.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220921/220921_조합2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220921/220921_최대상금.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220924카카오코테/문제01.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220924카카오코테/문제02.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220924카카오코테/문제03.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220924카카오코테/문제04.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220924카카오코테/문제05.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220924카카오코테/문제05다시.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220924카카오코테/문제06.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../220924카카오코테/문제07.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/220926_01.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/220926_02.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/220926_03.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../프로그래머스/Lv.2/뉴스클러스터링.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2FHmq5UieBSeFiVC3V8VbyReQ0b" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="Python.220926_02">
+    <configuration name="220926_01" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="220926월말평가" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/220926_01.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="220926_02" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="220926월말평가" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/220926_02.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.220926_02" />
+        <item itemvalue="Python.220926_01" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b479b389-4aa5-42be-91dd-f49aa917c71d" name="Changes" comment="" />
+      <created>1664157571340</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1664157571340</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
