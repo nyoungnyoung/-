@@ -20,7 +20,10 @@ function App() {
         Hello, {name}, <p>{2 + 3}</p>
       </h1>
       <a href={naver.url}>{naver.name}</a> */}
-      <Hello />
+      <h3>props : properties</h3>
+      <Hello age={10} />
+      <Hello age={20} />
+      <Hello age={30} />
       {/* <Hello />
       <Hello />
       <div className={styles.box}>App</div>
