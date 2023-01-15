@@ -24,7 +24,7 @@ REST 통신에 대해 이해하고, 인터페이스에 맞게 서버와 통신�
 
 ##### REST의 정의
 
-* **"Reapresentational State Transfer"** 의 약자  
+* **"Representational State Transfer"** 의 약자  
   
   * 자원(resource)의 표현(representation)에 의한 상태 전달
   
