@@ -62,7 +62,7 @@
 //   return <h1>Hello</h1>;
 // };
 import { useState } from "react";
-import UserName from './UserName';
+import UserName from "./UserName";
 
 // export default function Hello(props) {
 export default function Hello({ age }) {
@@ -92,7 +92,7 @@ export default function Hello({ age }) {
       </h2>
       {/* 이렇게도 작성 가능
       <button onClick={changeName}>Change</button> */}
-      <UserName name={name}/>
+      <UserName name={name} />
       <button
         onClick={() => {
           setName(name === "Mike" ? "Jane" : "Mike");
