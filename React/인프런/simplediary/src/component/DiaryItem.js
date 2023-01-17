@@ -1,14 +1,12 @@
-import { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { DiaryDispatchContext } from "../App";
 
-const DiaryItem = ({
-  onEdit,
-  onRemove,
-  author,
-  content,
-  created_date,
-  emotion,
-  id,
-}) => {
+const DiaryItem = ({ author, content, created_date, emotion, id }) => {
+  const { onRemove, onEdit } = useContext(DiaryDispatchContext);
+  // useEffect(() => {
+  //   console.log(`${id}번째 아이템 렌더!`);
+  // });
+
   // 현재 수정중인지 아닌지 확인해 줄 state 만들어주기 -> true라면 JSX가 수정중인 페이지를 렌더링 해줘야함!
   const [isEdit, setIsEdit] = useState(false);
   const toggleIsEdit = () => setIsEdit(!isEdit); // 실행되면 원래 isEdit이 갖고 있던 값을 반전시킴
@@ -82,4 +80,4 @@ const DiaryItem = ({
   );
 };
 
-export default DiaryItem;
+export default React.memo(DiaryItem);

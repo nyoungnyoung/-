@@ -1,6 +1,9 @@
+import { useContext } from "react";
+import { DiaryStateContext } from "../App";
 import DiaryItem from "./DiaryItem";
 
-const DiaryList = ({ diaryList, onRemove, onEdit }) => {
+const DiaryList = () => {
+  const diaryList = useContext(DiaryStateContext);
   // console.log(diaryList)
   return (
     <div className="DiaryList">
@@ -12,7 +15,7 @@ const DiaryList = ({ diaryList, onRemove, onEdit }) => {
                 바뀌게 되면 문제가 생기기 때문에 고유한 값인 id를 이용하는 게 현명 */}
         {diaryList.map((it) => (
           // DairyList는 App에서 onDelete를 내려받고, 이걸 또 DiaryItem으로 내려줘야함
-          <DiaryItem key={it.id} {...it} onEdit={onEdit} onRemove={onRemove} />
+          <DiaryItem key={it.id} {...it} />
         ))}
       </div>
     </div>
