@@ -1,6 +1,12 @@
-import { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const DiaryEditor = ({ onCreate }) => {
+  // useEffect 활용해서 언제 렌더링이 일어나는지 콘솔에 찍어보기
+  useEffect(() => {
+    console.log("DiaryEditor 렌더")
+  })
+  
+  
   // input에 들어갈 내용을 관리할 author라는 state와
   // 이 state의 상태변화를 시켜줄 함수 setAuthor
   // const [author, setAuthor] = useState("");
@@ -113,4 +119,4 @@ const DiaryEditor = ({ onCreate }) => {
   );
 };
 
-export default DiaryEditor;
+export default React.memo(DiaryEditor);

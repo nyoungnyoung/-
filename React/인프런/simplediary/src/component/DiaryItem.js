@@ -48,7 +48,7 @@ const DiaryItem = ({
   return (
     <div className="DiaryItem">
       <div className="info">
-        <span>
+        <span className="author_info">
           작성자 : {author} | 감정점수 : {emotion}
         </span>
         <br />
